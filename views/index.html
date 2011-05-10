@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="description" content="PageRank Service is the free and easy way to get the Google PageRank for any website." />
+	<title>Get the Google PageRank</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/mootools/1.3.1/mootools-yui-compressed.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		window.addEvent('domready', function() {			
+			$('uri').addEvents({
+				'focus': function() { if(this.get('value') == 'example.com') { this.set('value', '').removeClass('preset'); }},
+				'blur': function() { if(this.get('value') == '') { this.set('value', 'example.com').addClass('preset'); }}
+			});
+			
+			$('pr-form').addEvent('submit', function() {
+				document.location.hash = '#!' + $('uri').get('value');
+				new Request.JSON({url: '/json/' + $('uri').get('value'), onRequest: function() { $('result').set('text', '...'); }, onSuccess: function(result) {
+					if(parseInt(result.rank, 10) >= 0) {
+						$('result').set('text', result.rank + '/10');
+					} else {
+						$('result').set('text', 'N/A');
+					}
+				}}).get();
+				return false;
+			});
+			
+			if(document.location.hash.test(/^#![a-z0-9\.\-\/]+/i)) {
+				$('uri').set('value', document.location.hash.substr(2)).removeClass('preset');
+				$('pr-form').fireEvent('submit');
+			}
+		});
+	</script>
+	<style type="text/css">
+		html, body {
+			font-family: Lucida Grande, Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			text-align: center;
+			height: 100%;
+			color: #999;
+		}		
+		
+		a {
+			color: #666;
+			text-decoration: none;
+		}
+		
+		a:hover {
+			background-color: #ddd;
+		}
+		
+		#wrapper {
+			height: 170px;
+			width: 555px;
+			margin: -100px auto 0 auto;
+			position: relative;
+			top: 50%;
+			background-color: #80bf93;
+			box-shadow: 0 0 3px 1px #555;
+			border-radius: 4px;
+			color: #3e7c51;
+			font-family: Georgia, serif;
+		}
+		
+		h1 {
+			margin: 0;
+			padding: 20px 0;
+			text-shadow: #276339 -1px -1px 0;
+		}
+		
+		form {
+			text-align: left;
+			margin: 8px 20px 15px 20px;
+			border: 2px solid #559e6b;
+			padding: 5px;
+			border-radius: 4px;
+			background-color: white;
+		}
+		
+		input, label {
+			color: #444;
+			font-family: Lucida Grande, Arial, sans-serif;
+			border: 0 none;
+			font-size: 18px;
+			background-color: transparent;
+			padding: 2px 5px;
+			line-height: 25px;
+			margin: 0;
+			display: inline-block;
+			outline: none;
+		}
+		
+		input#uri {
+			width: 355px;
+		}
+		
+		input#uri.preset {
+			color: #999;
+		}
+		
+		input.send {
+			float: right;
+			background-color: #ddd;
+			cursor: pointer;
+		}
+		
+		label {
+			text-align: center;
+			font-size: 15px;
+			width: 60px;
+			color: white;
+			background-color: #1b4f2b;
+		}
+		
+		#wrapper a {
+			font-size: 12px;
+			font-style: italic;
+			float: right;
+			margin-right: 20px;
+			color: #3E7C51;
+			padding: 0 3px;
+		}
+		
+		#wrapper a:hover {
+			color: #1b4f2b;
+			background-color: #559e6b;
+		}
+		
+		#footer {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			padding: 15px;
+			font-size: 12px;
+			margin: 0 auto;
+		}
+	</style>
+	<!--#GA#-->
+</head>
+<body>
+<div id="wrapper">
+	<h1>Get the Google PageRank</h1>
+	<form id="pr-form" method="GET">
+		<label id="result" for="uri">URL:</label>
+		<input type="text" name="uri" value="example.com" id="uri" tabindex="1" class="preset" />
+		<input type="submit" name="send" value="Send" class="send" />
+	</form>
+	<a href="#">Check out the Firefox add-on</a>
+</div>
+<div id="footer">Brought to you by <a href="http://koeniglich.ch" title="Patrick is koeniglich">koeniglich.ch</a> — Hosted by <a href="http://www.heroku.com" title="Heroku | Ruby Cloud Platform as a Service">Heroku</a> — Source available on <a href="http://github.com/pstadler/pagerank-service" title="pagerank-service on GitHub">GitHub</a></div>
+</body>
+</html>
