@@ -14,14 +14,16 @@
 			});
 			
 			$('pr-form').addEvent('submit', function() {
-				window.location.hash = '#!' + $('uri').get('value');
-				new Request.JSON({url: '/json/' + $('uri').get('value'), onRequest: function() { $('result').set('text', '...'); }, onSuccess: function(result) {
-					if(parseInt(result.rank, 10) >= 0) {
-						$('result').set('text', result.rank + '/10');
-					} else {
-						$('result').set('text', 'N/A');
-					}
-				}}).get();
+				if($('uri').get('value') !== '') {
+					window.location.hash = '#!' + $('uri').get('value');
+					new Request.JSON({url: '/json/' + $('uri').get('value'), onRequest: function() { $('result').set('text', '...'); }, onSuccess: function(result) {
+						if(parseInt(result.rank, 10) >= 0) {
+							$('result').set('text', result.rank + '/10');
+						} else {
+							$('result').set('text', 'N/A');
+						}
+					}}).get();
+				}
 				return false;
 			});
 			
