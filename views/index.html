@@ -14,9 +14,10 @@
 			});
 			
 			$('pr-form').addEvent('submit', function() {
-				if($('uri').get('value') !== '') {
-					window.location.hash = '#!' + $('uri').get('value');
-					new Request.JSON({url: '/json/' + $('uri').get('value'), onRequest: function() { $('result').set('text', '...'); }, onSuccess: function(result) {
+				var uri = $('uri').get('value');
+				if(uri !== '') {
+					window.location.hash = '#!' + uri;
+					new Request.JSON({url: '/json/' + encodeURIComponent(uri), onRequest: function() { $('result').set('text', '...'); }, onSuccess: function(result) {
 						if(parseInt(result.rank, 10) >= 0) {
 							$('result').set('text', result.rank + '/10');
 						} else {
