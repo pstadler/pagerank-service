@@ -5,6 +5,7 @@ GEM
       json (~> 1.5.1)
       mime-types (~> 1.15)
       rest-client (~> 1.6.1)
+    gabba (0.1.1)
     json (1.5.1)
     mime-types (1.16)
     newrelic_rpm (2.14.0)
@@ -21,6 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   couchrest
+  gabba
   json
   newrelic_rpm
   sinatra

@@ -48,6 +48,7 @@ end
 get %r{/(.*)} do
   if request.env['HTTP_USER_AGENT'].include? 'pagerank-client'
     uri = params[:captures].first
+    Gabba::Gabba.new(ENV['GA_ACCOUNT'], "pagerank.koeniglich.ch").event("Clients", "Request", request.env['HTTP_USER_AGENT']) if ENV['GA_ACCOUNT']
     redirect PageRank.new(uri).request_uri, 301
   else
     index_html = File.read('./views/index.html')
