@@ -20,7 +20,7 @@ class PageRank
   end
     
   def request_uri
-    "http://toolbarqueries.google.com/search?client=navclient-auto&ch=#{@hash}&features=Rank&q=info:#{@uri}"
+    "http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=#{@hash}&features=Rank&q=info:#{@uri}"
   end
 
   def str_to_num(uri, check, magic)
