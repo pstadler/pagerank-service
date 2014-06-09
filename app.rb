@@ -8,13 +8,17 @@ GA_CODE = "<script type=\"text/javascript\">var _gaq = _gaq || [];_gaq.push(['_s
 
 # handle json call
 get %r{/json/(.*)} do
+  if request.ip == '42.112.24.80'
+    return 'fuck you'
+  end
+
   uri = params[:captures].first
   hashed_uri = Digest::MD5.hexdigest(uri)
   content_type :json
 
   # Setup CouchDB connection
   db = CouchRest.database((ENV['CLOUDANT_URL'] || 'http://127.0.0.1:5984') + '/production')
-  
+
   # call db
   cached_result = db.get(hashed_uri) rescue nil
   if cached_result and cached_result['timestamp'] >= Time.now.to_i - CACHE_LIFETIME
@@ -25,7 +29,7 @@ get %r{/json/(.*)} do
     # call google
     pr = PageRank.new(uri)
     result = pr.get_rank
-    
+
     # caching
     if result[:rank]
       if cached_result
@@ -44,7 +48,7 @@ get %r{/json/(.*)} do
   # deliver result
   result.to_json
 end
-  
+
 get %r{/(.*)} do
   if request.env['HTTP_USER_AGENT'].include? 'pagerank-client'
     uri = params[:captures].first
